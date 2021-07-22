@@ -195,6 +195,26 @@ public class FacebookLogin extends Plugin {
     }
 
     @PluginMethod
+    public void reauthorize(PluginCall call) {
+        Log.d(getLogTag(), "Entering reauthorize()");
+
+        PluginCall savedCall = getSavedCall();
+
+        if (savedCall != null) {
+            Log.e(getLogTag(), "reauthorize: overlapped calls not supported");
+
+            call.reject("Overlapped calls call not supported");
+
+            return;
+        }
+
+
+        LoginManager.getInstance().reauthorizeDataAccess(this.getActivity());
+
+        saveCall(call);
+    }
+
+    @PluginMethod
     public void getCurrentAccessToken(PluginCall call) {
         Log.d(getLogTag(), "Entering getCurrentAccessToken()");
 
